@@ -15,6 +15,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  bookAgent: (payload) => request("/agent/book-agent", { method: "POST", body: JSON.stringify(payload) }),
   getCentres: () => request("/centres"),
   getAvailability: (centreId, date) => request(`/centres/${centreId}/availability?date=${date}`),
   createBooking: (payload) => request("/bookings", { method: "POST", body: JSON.stringify(payload) }),
