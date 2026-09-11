@@ -1,0 +1,37 @@
+name: Smoke Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install backend deps
+        working-directory: backend
+        run: npm install
+
+      - name: Start server
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          nohup npm run dev > server.log 2>&1 &
+          sleep 2
+
+      - name: Run smoke test
+        working-directory: backend
+        run: npm run smoke
+
+      - name: Show server log on failure
+        if: failure()
+        working-directory: backend
+        run: cat server.log

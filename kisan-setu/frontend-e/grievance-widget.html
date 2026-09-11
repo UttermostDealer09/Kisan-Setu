@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Kisan Setu — Raise a Grievance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root { --green: #2C5F2D; --green-light: #E8F0E3; --red: #A6362C; --border: #D8DEDA; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #fafafa; margin: 0; padding: 24px; }
+  .card { max-width: 420px; margin: 0 auto; background: white; border: 1px solid var(--border);
+          border-radius: 12px; padding: 24px; }
+  h1 { font-size: 20px; color: var(--green); margin: 0 0 4px; }
+  p.sub { color: #666; font-size: 13px; margin: 0 0 20px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; color: #333; }
+  input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border);
+          border-radius: 8px; font-size: 14px; font-family: inherit; }
+  textarea { resize: vertical; min-height: 60px; }
+  button { width: 100%; margin-top: 20px; padding: 13px; background: var(--green); color: white;
+          border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  button:disabled { background: #999; cursor: not-allowed; }
+  button:hover:not(:disabled) { background: #234b24; }
+  .status { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; }
+  .status.ok { display: block; background: var(--green-light); color: var(--green); border: 1px solid var(--green); }
+  .status.err { display: block; background: #FBEAE8; color: var(--red); border: 1px solid var(--red); }
+  .config { font-size: 11px; color: #999; text-align: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Raise a Grievance</h1>
+  <p class="sub">Disagree with the grade or weight recorded? Log it here — a senior officer will review it with your photo evidence attached.</p>
+
+  <form id="grievanceForm">
+    <label for="bookingId">Booking ID</label>
+    <input id="bookingId" required placeholder="e.g. bk_8f21" value="bk_8f21" />
+
+    <label for="farmerId">Farmer ID</label>
+    <input id="farmerId" required placeholder="e.g. f_101" value="f_101" />
+
+    <label for="reason">What's wrong?</label>
+    <select id="reason" required>
+      <option value="Weight disputed">Weight disputed</option>
+      <option value="Grade disputed">Grade disputed</option>
+      <option value="Price / rate disputed">Price / rate disputed</option>
+      <option value="Delay in processing">Delay in processing</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="photoUrl">Photo evidence (URL for demo — real app uses camera upload)</label>
+    <input id="photoUrl" placeholder="https://..." value="https://example.com/evidence.jpg" />
+
+    <button type="submit" id="submitBtn">Submit Grievance</button>
+  </form>
+
+  <div id="status" class="status"></div>
+  <p class="config">API: <span id="apiBase"></span></p>
+</div>
+
+<script>
+  const API_BASE = "http://localhost:4000/api";
+  document.getElementById("apiBase").textContent = API_BASE;
+
+  const form = document.getElementById("grievanceForm");
+  const statusEl = document.getElementById("status");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    statusEl.className = "status";
+
+    const payload = {
+      bookingId: document.getElementById("bookingId").value,
+      farmerId: document.getElementById("farmerId").value,
+      reason: document.getElementById("reason").value,
+      photoUrl: document.getElementById("photoUrl").value,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/grievances`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+
+      statusEl.className = "status ok";
+      statusEl.textContent = `✅ Grievance logged (${data.grievanceId}). Status: ${data.status}. An officer will review it.`;
+    } catch (err) {
+      statusEl.className = "status err";
+      statusEl.textContent = `❌ ${err.message}. Is the backend running (npm run dev)?`;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Grievance";
+    }
+  });
+</script>
+
+</body>
+</html>
