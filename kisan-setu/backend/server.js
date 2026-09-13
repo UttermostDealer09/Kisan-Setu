@@ -1,23 +1,19 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-
 import bookingRoutes from "./routes/booking.js";
 import weatherRoutes from "./routes/weather.js";
 import transactionRoutes from "./routes/transactions.js";
 import grievanceRoutes from "./routes/grievance.js";
 import analyticsRoutes from "./routes/analytics.js";
-import agentRoutes from "./routes/agent.js";
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-
 app.get("/api/health", (req, res) => res.json({ ok: true, service: "kisan-setu-backend" }));
-
 app.use("/api", bookingRoutes);
 app.use("/api", weatherRoutes);
-app.use("/api/agent", agentRoutes);
 app.use("/api", transactionRoutes);
 app.use("/api", grievanceRoutes);
 app.use("/api", analyticsRoutes);
