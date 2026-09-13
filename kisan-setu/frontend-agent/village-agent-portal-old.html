@@ -15,15 +15,19 @@
 
   .shell { display: flex; min-height: 100vh; }
 
+  /* ---- sidebar: same shape/pattern as the buyer dashboard shell ---- */
   .sidebar { width: 200px; background: var(--green-dark); color: white; padding: 20px 0; flex-shrink: 0; }
   .sidebar .brand { padding: 0 20px 20px; font-size: 17px; font-weight: 700; border-bottom: 1px solid #2f4f30; }
   .sidebar .brand span { color: #8FCB8F; }
   .sidebar .tagline { font-size: 11px; color: #b7c9b7; padding: 0 20px; margin-top: 4px; }
   .sidebar nav { margin-top: 16px; }
-  .sidebar nav a { display: block; padding: 11px 20px; color: #d7e5d7; text-decoration: none; font-size: 13.5px; }
+  .sidebar nav a {
+    display: block; padding: 11px 20px; color: #d7e5d7; text-decoration: none; font-size: 13.5px;
+  }
   .sidebar nav a.active { background: var(--green); color: white; font-weight: 600; }
   .sidebar nav a:hover:not(.active) { background: #244325; }
 
+  /* ---- main content ---- */
   .main { flex: 1; padding: 28px 32px; }
   .main h1 { font-size: 19px; margin: 0 0 2px; color: var(--green-dark); }
   .main p.sub { color: var(--gray); font-size: 13px; margin: 0 0 22px; }
@@ -35,8 +39,6 @@
 
   label { display: block; font-size: 12.5px; font-weight: 600; margin: 12px 0 5px; color: #333; }
   input, select { width: 100%; padding: 9px; border: 1px solid var(--border); border-radius: 7px; font-size: 13.5px; font-family: inherit; }
-  input.field-error, select.field-error { border-color: var(--red); background: #FFF8F7; }
-  .field-error-msg { color: var(--red); font-size: 11.5px; margin-top: 4px; display: none; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
   button.primary {
@@ -46,19 +48,12 @@
   button.primary:disabled { background: #999; cursor: not-allowed; }
   button.primary:hover:not(:disabled) { background: var(--green-dark); }
 
-  button.secondary {
-    margin-top: 10px; width: 100%; padding: 10px; background: white; color: var(--green);
-    border: 1px solid var(--green); border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-  button.secondary:hover { background: var(--green-light); }
-
   .avail-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; margin-top: 8px; }
   .avail-green { background: #E7F4EA; color: #2C7A3D; }
   .avail-amber { background: #FBF3E6; color: #B5651D; }
   .avail-red { background: #FBEAE8; color: var(--red); }
 
   .receipt { text-align: center; }
-  .receipt .print-header { display: none; }
   #qrcode { margin: 14px auto; display: inline-block; }
   .receipt .payload { font-size: 10px; color: var(--gray); word-break: break-all; margin-top: 6px; }
   button.print {
@@ -70,33 +65,15 @@
   .status { margin-top: 12px; padding: 10px; border-radius: 7px; font-size: 12.5px; display: none; }
   .status.err { display: block; background: #FBEAE8; color: var(--red); border: 1px solid var(--red); }
 
-  .banner {
-    display: none; margin-bottom: 18px; padding: 12px 14px; background: #FBEAE8; border: 1px solid var(--red);
-    border-radius: 8px; font-size: 13px; color: var(--red); align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .banner.show { display: flex; }
-  .banner button {
-    padding: 6px 12px; background: var(--red); color: white; border: none; border-radius: 6px;
-    font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
-  }
-
-  .session-header { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; }
-  .session-header h2 { margin: 0; font-size: 14px; color: var(--green); }
-  .session-header .count { font-size: 12px; color: var(--gray); }
-  .clear-link { font-size: 12px; color: var(--red); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
-
   table { width: 100%; border-collapse: collapse; margin-top: 8px; }
   th, td { text-align: left; padding: 8px 6px; font-size: 12px; border-bottom: 1px solid var(--border); }
   th { color: var(--gray); font-weight: 600; font-size: 11px; text-transform: uppercase; }
   .empty { color: var(--gray); font-size: 12.5px; padding: 14px 0; text-align: center; }
 
   @media print {
-    .sidebar, .main > h1, .main > p.sub, .grid > .card:first-child, .session-header, table, .banner { display: none !important; }
+    .sidebar, .main > h1, .main > p.sub, .grid > .card:first-child, table, h2.recent-title { display: none !important; }
     .grid { display: block; }
-    .receipt { border: 2px solid #000; padding: 24px; }
-    .receipt .print-header { display: block; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .receipt .print-timestamp { font-size: 11px; color: #555; margin-bottom: 14px; }
-    button.print { display: none; }
+    .receipt { border: 2px solid #000; }
   }
 </style>
 </head>
@@ -108,7 +85,7 @@
     <div class="tagline">Village Agent Portal</div>
     <nav>
       <a class="active" href="#">Book for Farmer</a>
-      <a href="../frontend-e/grievance-review.html">Grievance Review</a>
+      <a href="grievance-review.html">Grievance Review</a>
     </nav>
   </div>
 
@@ -116,36 +93,29 @@
     <h1>Book a Procurement Slot for a Farmer</h1>
     <p class="sub">For farmers without a smartphone — book on their behalf and print a QR receipt they can bring to the centre.</p>
 
-    <div class="banner" id="backendBanner">
-      <span>Can't reach the backend — is <code>npm run dev</code> running?</span>
-      <button onclick="loadCentres()">Retry</button>
-    </div>
-
     <div class="grid">
-      <div class="card" id="formCard">
+      <div class="card">
         <h2>Farmer & Slot Details</h2>
-        <form id="bookingForm" novalidate>
+        <form id="bookingForm">
           <div class="row2">
             <div>
               <label for="farmerName">Farmer Name</label>
-              <input id="farmerName" placeholder="e.g. Ramesh Kumar" value="Ramesh Kumar" />
-              <div class="field-error-msg" id="err-farmerName">Farmer name is required.</div>
+              <input id="farmerName" required placeholder="e.g. Ramesh Kumar" value="Ramesh Kumar" />
             </div>
             <div>
               <label for="farmerId">Farmer ID</label>
-              <input id="farmerId" placeholder="e.g. f_101" value="f_101" />
-              <div class="field-error-msg" id="err-farmerId">Farmer ID is required.</div>
+              <input id="farmerId" required placeholder="e.g. f_101" value="f_101" />
             </div>
           </div>
 
           <label for="centreId">Procurement Centre</label>
           <select id="centreId"></select>
-          <div class="field-error-msg" id="err-centreId">Please select a centre.</div>
           <div id="availBadge"></div>
 
-          <label for="date">Date</label>
-          <input id="date" type="date" />
-          <div class="field-error-msg" id="err-date">Please pick today or a future date.</div>
+          <div class="row2">
+            <label for="date" style="grid-column: span 2;">Date</label>
+          </div>
+          <input id="date" type="date" required />
 
           <div class="row2">
             <div>
@@ -168,22 +138,15 @@
       </div>
 
       <div class="card receipt" id="receiptCard" style="display:none;">
-        <div class="print-header">Kisan Setu — Official Booking Receipt</div>
-        <div class="print-timestamp" id="printTimestamp"></div>
         <h2>QR Receipt</h2>
         <div id="qrcode"></div>
         <div id="receiptDetails" style="font-size:12.5px; text-align:left;"></div>
         <div class="payload" id="payloadText"></div>
         <button class="print" onclick="window.print()">🖨 Print Receipt</button>
-        <button class="secondary" onclick="resetForNextFarmer()">➕ Book for Another Farmer</button>
       </div>
     </div>
 
-    <div class="session-header">
-      <h2>Bookings Made This Session</h2>
-      <span class="count" id="sessionCount"></span>
-      <button class="clear-link" onclick="clearSession()">Clear list</button>
-    </div>
+    <h2 class="recent-title" style="margin-top:26px; font-size:14px; color: var(--green);">Bookings Made This Session</h2>
     <div class="card" style="margin-top:8px;">
       <table id="recentTable">
         <thead>
@@ -205,57 +168,26 @@
   const availBadge = document.getElementById("availBadge");
   const statusEl = document.getElementById("status");
   const submitBtn = document.getElementById("submitBtn");
-  const backendBanner = document.getElementById("backendBanner");
 
+  // default date = today
   dateInput.value = new Date().toISOString().slice(0, 10);
-  dateInput.min = new Date().toISOString().slice(0, 10); // can't pick a past date in the picker itself
-
-  function clearFieldErrors() {
-    document.querySelectorAll(".field-error-msg").forEach((el) => (el.style.display = "none"));
-    document.querySelectorAll(".field-error").forEach((el) => el.classList.remove("field-error"));
-  }
-
-  function showFieldError(fieldId) {
-    document.getElementById(fieldId).classList.add("field-error");
-    const msg = document.getElementById(`err-${fieldId}`);
-    if (msg) msg.style.display = "block";
-  }
-
-  function validateForm() {
-    clearFieldErrors();
-    let valid = true;
-    const farmerName = document.getElementById("farmerName").value.trim();
-    const farmerId = document.getElementById("farmerId").value.trim();
-    const centreId = centreSelect.value;
-    const date = dateInput.value;
-    const today = new Date().toISOString().slice(0, 10);
-
-    if (!farmerName) { showFieldError("farmerName"); valid = false; }
-    if (!farmerId) { showFieldError("farmerId"); valid = false; }
-    if (!centreId) { showFieldError("centreId"); valid = false; }
-    if (!date || date < today) { showFieldError("date"); valid = false; }
-
-    return valid;
-  }
 
   async function loadCentres() {
-    backendBanner.classList.remove("show");
     try {
       const res = await fetch(`${API_BASE}/centres`);
-      if (!res.ok) throw new Error("Backend responded with an error");
       const centres = await res.json();
       centreSelect.innerHTML = centres.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
       checkAvailability();
     } catch (err) {
-      backendBanner.classList.add("show");
-      centreSelect.innerHTML = `<option value="">-- backend unreachable --</option>`;
+      statusEl.className = "status err";
+      statusEl.textContent = `Couldn't load centres — is the backend running? (${err.message})`;
     }
   }
 
   async function checkAvailability() {
     const centreId = centreSelect.value;
     const date = dateInput.value;
-    if (!centreId || !date) { availBadge.innerHTML = ""; return; }
+    if (!centreId || !date) return;
     try {
       const res = await fetch(`${API_BASE}/centres/${centreId}/availability?date=${date}`);
       const data = await res.json();
@@ -271,8 +203,6 @@
     const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const tbody = document.getElementById("recentBody");
     const emptyState = document.getElementById("emptyState");
-    document.getElementById("sessionCount").textContent = list.length
-      ? `${list.length} booking${list.length === 1 ? "" : "s"}` : "";
     if (!list.length) {
       tbody.innerHTML = "";
       emptyState.style.display = "block";
@@ -297,42 +227,16 @@
     loadRecent();
   }
 
-  function clearSession() {
-    if (!confirm("Clear all bookings from this session's list? (This only clears the local list — real bookings already made stay in the system.)")) return;
-    localStorage.removeItem(STORAGE_KEY);
-    loadRecent();
-  }
-  window.clearSession = clearSession;
-
-  function resetForNextFarmer() {
-    document.getElementById("farmerName").value = "";
-    document.getElementById("farmerId").value = "";
-    document.getElementById("estWeight").value = "40";
-    document.getElementById("receiptCard").style.display = "none";
-    clearFieldErrors();
-    statusEl.className = "status";
-    document.getElementById("farmerName").focus();
-    // deliberately keep centre + date as-is — the agent is likely still at the same centre, same day
-  }
-  window.resetForNextFarmer = resetForNextFarmer;
-
   document.getElementById("bookingForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    statusEl.className = "status";
-
-    if (!validateForm()) {
-      statusEl.className = "status err";
-      statusEl.textContent = "Please fix the highlighted fields above.";
-      return;
-    }
-
     submitBtn.disabled = true;
     submitBtn.textContent = "Booking...";
+    statusEl.className = "status";
 
     const centreId = centreSelect.value;
     const centreName = centreSelect.options[centreSelect.selectedIndex]?.text || centreId;
     const payload = {
-      farmerId: document.getElementById("farmerId").value.trim(),
+      farmerId: document.getElementById("farmerId").value,
       centreId,
       date: dateInput.value,
       crop: document.getElementById("crop").value,
@@ -348,12 +252,11 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Booking failed");
 
+      // render QR
       const qrDiv = document.getElementById("qrcode");
       qrDiv.innerHTML = "";
       new QRCode(qrDiv, { text: data.qrPayload, width: 150, height: 150 });
 
-      document.getElementById("printTimestamp").textContent =
-        `Issued ${new Date().toLocaleString()}`;
       document.getElementById("receiptDetails").innerHTML = `
         <strong>${document.getElementById("farmerName").value}</strong><br/>
         ${centreName} \u2014 ${data.date}<br/>
